@@ -37,8 +37,27 @@ class BeerClientImplTest {
     void listBeers() {
         Mono<BeerPagedList> beerPagedListMono = beerClient.listBeers(null, null,null, null, null);
 
-        BeerPagedList beerPagedList = beerPagedListMono.block(); //blocks into a single thread
+        BeerPagedList beerPagedList = beerPagedListMono.block(); //blocks into a single thread > stays on the thread
         assertThat(beerPagedList).isNotNull();
+        assertThat(beerPagedList.getContent().size()).isGreaterThan(0);
+    }
+
+    @Test
+    void listBeersPageSize10() {
+        Mono<BeerPagedList> beerPagedListMono = beerClient.listBeers(1, 10,null, null, null);
+
+        BeerPagedList beerPagedList = beerPagedListMono.block(); //blocks into a single thread > stays on the thread
+        assertThat(beerPagedList).isNotNull();
+        assertThat(beerPagedList.getContent().size()).isEqualTo(10);
+    }
+
+    @Test
+    void listBeersEmpty() {
+        Mono<BeerPagedList> beerPagedListMono = beerClient.listBeers(10, 20,null, null, null);
+
+        BeerPagedList beerPagedList = beerPagedListMono.block(); //blocks into a single thread > stays on the thread
+        assertThat(beerPagedList).isNotNull();
+        assertThat(beerPagedList.getContent().size()).isEqualTo(0);
     }
 
     @Test
