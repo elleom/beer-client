@@ -2,9 +2,7 @@ package com.lm.beerclient.client;
 
 import com.lm.beerclient.model.Beer;
 import com.lm.beerclient.model.BeerPagedList;
-import com.lm.beerclient.model.BeerStyle;
 import org.springframework.http.ResponseEntity;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;

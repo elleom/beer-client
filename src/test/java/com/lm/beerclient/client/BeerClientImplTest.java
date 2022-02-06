@@ -1,10 +1,14 @@
 package com.lm.beerclient.client;
 
 import com.lm.beerclient.config.WebClientConfig;
+import com.lm.beerclient.model.Beer;
 import com.lm.beerclient.model.BeerPagedList;
+import com.lm.beerclient.model.v2.BeerStyle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;
+
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,6 +27,15 @@ class BeerClientImplTest {
 
     @Test
     void getBeerById() {
+
+        Mono<BeerPagedList> beerPagedListMono = beerClient.listBeers(null, null,null, null, null);
+        BeerPagedList beerPagedList = beerPagedListMono.block(); //blocks into a single thread > stays on the thread
+        UUID beerId = beerPagedList.getContent().get(0).getId();
+        Mono<Beer> beerMono = beerClient.getBeerById(beerId, false);
+        Beer beer = beerMono.block();
+        assertThat(beer).isNotNull();
+
+
     }
 
     @Test
@@ -31,6 +44,13 @@ class BeerClientImplTest {
 
     @Test
     void getBeerByUPC() {
+        Mono<BeerPagedList> beerPagedListMono = beerClient.listBeers(null, null,null, null, null);
+        BeerPagedList beerPagedList = beerPagedListMono.block(); //blocks into a single thread > stays on the thread
+        String beerUpc = beerPagedList.getContent().get(0).getUpc();
+        Mono<Beer> beerMono = beerClient.getBeerByUPC(beerUpc);
+        Beer beer = beerMono.block();
+        assertThat(beer).isNotNull();
+        assertThat(beer.getUpc()).isEqualTo(beerUpc);
     }
 
     @Test
