@@ -25,7 +25,7 @@ public interface BeerClient {
                                   String beerStyle,
                                   Boolean showInventoryOnHand);
 
-    Mono<ResponseEntity> createBeer(Beer beer);
+    Mono<ResponseEntity<Void>> createBeer(Beer beer);
 
     Mono<ResponseEntity> updateBeer(Beer beer);
 
