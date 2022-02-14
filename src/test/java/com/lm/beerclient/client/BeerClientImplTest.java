@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClientException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
@@ -136,5 +137,20 @@ class BeerClientImplTest {
             ResponseEntity<Void> responseEntity = responseEntityMono.block();
             assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         });
+    }
+
+    @Test
+    void handleException() {
+        Mono<ResponseEntity<Void>> responseEntityMono = beerClient.deleteBeerById(UUID.randomUUID());
+        ResponseEntity<Void> responseEntity = responseEntityMono.onErrorResume(throwable -> {
+            if (throwable instanceof WebClientResponseException){
+                WebClientResponseException webClientException = (WebClientResponseException) throwable;
+                return Mono.just(ResponseEntity.status(webClientException.getStatusCode()).build());
+            } else {
+                throw new RuntimeException(throwable);
+            }
+        }).block();
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 }
