@@ -1,4 +1,4 @@
-package com.lm.beerclient.model;
+package com.lm.beerclient.model.v2;
 
 /**
  * @author el_le

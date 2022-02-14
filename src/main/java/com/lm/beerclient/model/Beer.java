@@ -1,5 +1,6 @@
 package com.lm.beerclient.model;
 
+import com.lm.beerclient.model.v2.BeerStyle;
 import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;

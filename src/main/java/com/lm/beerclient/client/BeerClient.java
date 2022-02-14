@@ -2,9 +2,7 @@ package com.lm.beerclient.client;
 
 import com.lm.beerclient.model.Beer;
 import com.lm.beerclient.model.BeerPagedList;
-import com.lm.beerclient.model.BeerStyle;
 import org.springframework.http.ResponseEntity;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
@@ -27,9 +25,9 @@ public interface BeerClient {
                                   String beerStyle,
                                   Boolean showInventoryOnHand);
 
-    Mono<ResponseEntity> createBeer(Beer beer);
+    Mono<ResponseEntity<Void>> createBeer(Beer beer);
 
-    Mono<ResponseEntity> updateBeer(Beer beer);
+    Mono<ResponseEntity<Void>> updateBeer(UUID id, Beer beer);
 
-    Mono<ResponseEntity> deleteBeerById(UUID id);
+    Mono<ResponseEntity<Void>> deleteBeerById(UUID id);
 }
