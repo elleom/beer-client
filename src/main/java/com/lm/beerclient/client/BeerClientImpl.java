@@ -35,8 +35,7 @@ public class BeerClientImpl implements BeerClient {
     }
 
     @Override
-    public Mono<Beer> getBeerByName(String name) {
-        return null;
+    public Mono<Beer> getBeerByName(String name) { return null;
     }
 
     @Override
@@ -78,12 +77,22 @@ public class BeerClientImpl implements BeerClient {
     }
 
     @Override
-    public Mono<ResponseEntity> updateBeer(Beer beer) {
-        return null;
+    public Mono<ResponseEntity<Void>> updateBeer(UUID id, Beer beer) {
+
+        return webClient.put()
+                .uri(uriBuilder -> uriBuilder.path(WebClientProperties.BEER_V1_PATH_GET_BY_ID)
+                        .build(id))
+                .body(BodyInserters.fromValue(beer))
+                .retrieve()
+                .toBodilessEntity();
     }
 
     @Override
-    public Mono<ResponseEntity> deleteBeerById(UUID id) {
-        return null;
+    public Mono<ResponseEntity<Void>> deleteBeerById(UUID id) {
+
+        return webClient.delete()
+                .uri(uriBuilder -> uriBuilder.path(WebClientProperties.BEER_V1_PATH_GET_BY_ID)
+                .build(id))
+                .retrieve().toBodilessEntity();
     }
 }

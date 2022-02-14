@@ -37,8 +37,6 @@ class BeerClientImplTest {
         Mono<Beer> beerMono = beerClient.getBeerById(beerId, false);
         Beer beer = beerMono.block();
         assertThat(beer).isNotNull();
-
-
     }
 
     @Test
@@ -100,9 +98,35 @@ class BeerClientImplTest {
 
     @Test
     void updateBeer() {
+        Mono<BeerPagedList> beerPagedListMono = beerClient.listBeers(null, null,null, null, null);
+        BeerPagedList beerPagedList = beerPagedListMono.block(); //blocks into a single thread > stays on the thread
+
+        Beer beerOld = beerPagedList.getContent().get(0);
+        Beer updatedBeer = Beer.builder().beerName("New Name")
+                .beerStyle(beerOld.getBeerStyle())
+                .price(beerOld.getPrice())
+                .upc(beerOld.getUpc())
+                .build();
+
+        Mono<ResponseEntity<Void>> responseEntityMono = beerClient.updateBeer(beerOld.getId(), updatedBeer);
+        ResponseEntity<Void> responseEntity = responseEntityMono.block();
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
     }
 
     @Test
     void deleteBeerById() {
+        Mono<BeerPagedList> beerPagedListMono = beerClient.listBeers(null, null,null, null, null);
+        BeerPagedList beerPagedList = beerPagedListMono.block(); //blocks into a single thread > stays on the thread
+        Beer beerOld = beerPagedList.getContent().get(0);
+
+        Mono<ResponseEntity<Void>> responseEntityMono = beerClient.deleteBeerById(beerOld.getId());
+        ResponseEntity<Void> responseEntity = responseEntityMono.block();
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
+
+
+
     }
 }
